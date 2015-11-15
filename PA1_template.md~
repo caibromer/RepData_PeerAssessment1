@@ -1,37 +1,149 @@
 ---
----
 title: "PA1_template.Rmd"
 output: html_document
 ---
 
 The goal of this project is to look at trends in the activity pattern of one individual over the course of two months, as measured by steps taken. The first steps is to read in the data for processing (including removing missing values:
 
-```{r,echo=TRUE}
+
+```r
 setInternet2(use = TRUE) 
+library (knitr)
 setwd('C:/Users/Cailey/Desktop/DataScienceCourse/05 Reproducible Research/Week 2/')
+knit2html("PA1_template.Rmd")
+```
+
+```
+## 
+## 
+## processing file: PA1_template.Rmd
+```
+
+```
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |......                                                           |  10%
+##   ordinary text without R code
+## 
+## 
+  |                                                                       
+  |.............                                                    |  20%
+## label: unnamed-chunk-6 (with options) 
+## List of 1
+##  $ echo: logi TRUE
+```
+
+```
+## 
+  |                                                                       
+  |....................                                             |  30%
+##   ordinary text without R code
+## 
+## 
+  |                                                                       
+  |..........................                                       |  40%
+## label: unnamed-chunk-7 (with options) 
+## List of 1
+##  $ echo: logi TRUE
+```
+
+```
+## 
+  |                                                                       
+  |................................                                 |  50%
+##   ordinary text without R code
+## 
+## 
+  |                                                                       
+  |.......................................                          |  60%
+## label: unnamed-chunk-8 (with options) 
+## List of 1
+##  $ echo: logi TRUE
+```
+
+```
+## 
+  |                                                                       
+  |..............................................                   |  70%
+##   ordinary text without R code
+## 
+## 
+  |                                                                       
+  |....................................................             |  80%
+## label: unnamed-chunk-9 (with options) 
+## List of 1
+##  $ echo: logi TRUE
+```
+
+```
+## 
+  |                                                                       
+  |..........................................................       |  90%
+##   ordinary text without R code
+## 
+## 
+  |                                                                       
+  |.................................................................| 100%
+## label: unnamed-chunk-10 (with options) 
+## List of 1
+##  $ echo: logi TRUE
+```
+
+```
+## output file: PA1_template.md
+```
+
+```r
 step=read.csv("activity.csv")
+browsURL("PA1_template.html")
+```
+
+```
+## Error in eval(expr, envir, enclos): could not find function "browsURL"
+```
+
+```r
 activity<-step[complete.cases(step),]
 ```
 
 Next, we want to calculate the total number of steps taken per day, plot a histogram of this, and then calculcate and report the mean and median steps taken per day:
 
-```{r, echo=TRUE}
+
+```r
 #sum steps
 sum<-tapply(activity$steps, activity$date,sum)
 
 #plot sum
 hist(sum)
+```
 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
+
+```r
 #calculate and report mean and median
 mean_sum<-mean(sum,na.rm=TRUE)
 mean_sum
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median_sum<-median(sum,na.rm=TRUE)
 median_sum
 ```
 
+```
+## [1] 10765
+```
+
 The next step in our analysis is to calculate plot the average number of steps in each 5-minute time interval:
 
-```{r, echo=TRUE}
+
+```r
 #calculate average number of steps per interval
 five_min<-tapply(activity$steps, activity$interval, mean)
 
@@ -39,30 +151,49 @@ five_min<-tapply(activity$steps, activity$interval, mean)
 plot(five_min,type="l",xlab="Intervals", ylab="Number of steps")
 ```
 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
+
 Looking at the graph, we can estimate the highest number of steps occurs at the 105th 5-minute interval, on average across all days.
 
 In the next step of our analysis, we replace missing values (NA) with an average of the mean number of steps per interval. Using this new "doctored" data, we plot a histogram, and report mean and median steps per day:
 
-```{r, echo=TRUE}
+
+```r
 #replace missing values with average
 step[is.na(step)]<-mean(step$steps,na.rm=TRUE)
 
 #make hist of total steps per day from this new data
 sum_doctored<-tapply(step$steps,step$date,sum)
 hist(sum_doctored)
+```
 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
+
+```r
 #calculate mean and median of new data
 mean_sum_doctored<-mean(sum_doctored,na.rm=TRUE)
 mean_sum_doctored
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median_sum_doctored<-median(sum_doctored,na.rm=TRUE)
 median_sum_doctored
+```
+
+```
+## [1] 10766.19
 ```
 
 We can see that replacing the missing values with an average changes has not significantly affected the mean, median, and distribution of the data.
 
 The last thing we want to do is look at how average number of steps differ on weekdays and weekends. We divide our data into groups according to the day of the week, and plot the average number of steps per interval:
 
-```{r, echo=TRUE}
+
+```r
 #break data into weekend and weekday
 date<-as.Date(activity$date)
 week<-weekdays(date)
@@ -85,5 +216,6 @@ weekdayz_mean<-tapply(weekdayz$steps, weekdayz$interval, mean)
 par(mfrow=c(2,1))
 plot(weekend_mean, type="l",xlab = "Intervals", ylab="Number of steps",main = "Weekend")
 plot(weekdayz_mean, type="l", xlab = "Intervals", ylab="Number of steps",main ="Weekday")
-
 ```
+
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
